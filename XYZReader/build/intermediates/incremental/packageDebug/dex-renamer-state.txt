@@ -1,0 +1,7 @@
+#Wed Oct 12 01:56:10 IST 2016
+base.0=/home/sudhir/Documents/Android/Udacity/xyz-reader-app/XYZReader/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_9ff24b2a27496867568e3650d9d6d36e093b7fba
+renamed.1=classes2.dex
+renamed.0=classes.dex
+file.1=/home/sudhir/Documents/Android/Udacity/xyz-reader-app/XYZReader/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_fd923cc59017378209d776f4f15830f4945af163/classes.dex
+base.1=/home/sudhir/Documents/Android/Udacity/xyz-reader-app/XYZReader/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_fd923cc59017378209d776f4f15830f4945af163
+file.0=/home/sudhir/Documents/Android/Udacity/xyz-reader-app/XYZReader/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_9ff24b2a27496867568e3650d9d6d36e093b7fba/classes.dex
