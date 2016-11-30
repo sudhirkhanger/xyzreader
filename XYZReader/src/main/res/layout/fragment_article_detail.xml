@@ -93,7 +93,7 @@
     </com.example.xyzreader.ui.ObservableScrollView>
 
     <ImageButton android:id="@+id/share_fab"
-        android:stateListAnimator="@anim/fab_state_list_anim"
+        android:stateListAnimator="@drawable/fab_state_list_anim"
         android:background="@drawable/add_fab_background"
         android:layout_gravity="bottom|end"
         android:layout_marginRight="@dimen/fab_margin"
