@@ -8,12 +8,16 @@ import android.content.IntentFilter;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -35,6 +39,8 @@ public class ArticleListActivity extends AppCompatActivity implements
     private Toolbar mToolbar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
+    private CoordinatorLayout coordinatorLayout;
+    public static final String LOG_TAG = ArticleListActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +54,7 @@ public class ArticleListActivity extends AppCompatActivity implements
         }
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorlayout);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         getLoaderManager().initLoader(0, null, this);
@@ -66,12 +73,16 @@ public class ArticleListActivity extends AppCompatActivity implements
         super.onStart();
         registerReceiver(mRefreshingReceiver,
                 new IntentFilter(UpdaterService.BROADCAST_ACTION_STATE_CHANGE));
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                internetStatusReceiver,
+                new IntentFilter(UpdaterService.BROADCAST_ACTION_INTERNET_STATE));
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         unregisterReceiver(mRefreshingReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(internetStatusReceiver);
     }
 
     private boolean mIsRefreshing = false;
@@ -86,8 +97,23 @@ public class ArticleListActivity extends AppCompatActivity implements
         }
     };
 
+    private BroadcastReceiver internetStatusReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(LOG_TAG, "Internet Status - No");
+            Snackbar.make(
+                    coordinatorLayout,
+                    R.string.no_internet,
+                    Snackbar.LENGTH_SHORT).show();
+        }
+    };
+
     private void updateRefreshingUI() {
         mSwipeRefreshLayout.setRefreshing(mIsRefreshing);
+                    Snackbar.make(
+                    coordinatorLayout,
+                    R.string.updating_content,
+                    Snackbar.LENGTH_SHORT).show();
     }
 
     @Override

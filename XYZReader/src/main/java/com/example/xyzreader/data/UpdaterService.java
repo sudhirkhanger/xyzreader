@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.RemoteException;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.format.Time;
 import android.util.Log;
 
@@ -28,6 +29,9 @@ public class UpdaterService extends IntentService {
     public static final String EXTRA_REFRESHING
             = "com.example.xyzreader.intent.extra.REFRESHING";
 
+    public static final String BROADCAST_ACTION_INTERNET_STATE
+            = "com.example.xyzreader.intent.action.INTERNET_STATE";
+
     public UpdaterService() {
         super(TAG);
     }
@@ -40,6 +44,8 @@ public class UpdaterService extends IntentService {
         NetworkInfo ni = cm.getActiveNetworkInfo();
         if (ni == null || !ni.isConnected()) {
             Log.w(TAG, "Not online, not refreshing.");
+            Intent internetIntent = new Intent(BROADCAST_ACTION_INTERNET_STATE);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(internetIntent);
             return;
         }
 
@@ -57,19 +63,19 @@ public class UpdaterService extends IntentService {
         try {
             JSONArray array = RemoteEndpointUtil.fetchJsonArray();
             if (array == null) {
-                throw new JSONException("Invalid parsed item array" );
+                throw new JSONException("Invalid parsed item array");
             }
 
             for (int i = 0; i < array.length(); i++) {
                 ContentValues values = new ContentValues();
                 JSONObject object = array.getJSONObject(i);
-                values.put(ItemsContract.Items.SERVER_ID, object.getString("id" ));
-                values.put(ItemsContract.Items.AUTHOR, object.getString("author" ));
-                values.put(ItemsContract.Items.TITLE, object.getString("title" ));
-                values.put(ItemsContract.Items.BODY, object.getString("body" ));
-                values.put(ItemsContract.Items.THUMB_URL, object.getString("thumb" ));
-                values.put(ItemsContract.Items.PHOTO_URL, object.getString("photo" ));
-                values.put(ItemsContract.Items.ASPECT_RATIO, object.getString("aspect_ratio" ));
+                values.put(ItemsContract.Items.SERVER_ID, object.getString("id"));
+                values.put(ItemsContract.Items.AUTHOR, object.getString("author"));
+                values.put(ItemsContract.Items.TITLE, object.getString("title"));
+                values.put(ItemsContract.Items.BODY, object.getString("body"));
+                values.put(ItemsContract.Items.THUMB_URL, object.getString("thumb"));
+                values.put(ItemsContract.Items.PHOTO_URL, object.getString("photo"));
+                values.put(ItemsContract.Items.ASPECT_RATIO, object.getString("aspect_ratio"));
                 time.parse3339(object.getString("published_date"));
                 values.put(ItemsContract.Items.PUBLISHED_DATE, time.toMillis(false));
                 cpo.add(ContentProviderOperation.newInsert(dirUri).withValues(values).build());
