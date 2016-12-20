@@ -141,9 +141,9 @@ public class ArticleDetailFragment extends Fragment implements
 
         mStatusBarColorDrawable = new ColorDrawable(0);
 
-        mRootView.findViewById(R.id.share_fab).setOnClickListener(new View.OnClickListener() {
+        mRootView.findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 if (mCursor != null) {
                     startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
                             .setType("text/plain")
